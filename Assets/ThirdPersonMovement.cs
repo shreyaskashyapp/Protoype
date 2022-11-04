@@ -67,7 +67,11 @@ public class ThirdPersonMovement : MonoBehaviour
 
          if(Input.GetButtonDown("Jump")&& GroundCheck() ){
             Debug.Log("jump");
+            animator.SetBool("isJumping",true);
             rg.velocity=new Vector3(0,5f,0);
+        }
+        else{
+            animator.SetBool("isJumping",false);
         }
     }
      bool GroundCheck(){
