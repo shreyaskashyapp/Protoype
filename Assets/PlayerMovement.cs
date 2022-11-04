@@ -23,11 +23,13 @@ public class PlayerMovement : MonoBehaviour
         float Vertical=Input.GetAxis("Vertical");
         rg.velocity=new Vector3(Horizontal*speed,rg.velocity.y,Vertical*speed);
 
-        if(Input.GetButtonDown("Jump") && GroundCheck()){
+        if(Input.GetButtonDown("Jump")&& GroundCheck() ){
+            Debug.Log("jump");
             rg.velocity=new Vector3(0,jump,0);
         }
     }
     bool GroundCheck(){
-        return Physics.CheckSphere(groundCheck.position,0.1f,layer);
+        Debug.Log(Physics.CheckSphere(groundCheck.position,0.5f,layer));
+        return Physics.CheckSphere(groundCheck.position,0.5f,layer);
     }
 }
