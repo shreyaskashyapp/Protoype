@@ -10,17 +10,24 @@ public class ThirdPersonMovement : MonoBehaviour
     public Transform cam;
 
     public float speed = 6;
-    public float gravity = -9.81f;
+
     public float jumpHeight = 3;
     Vector3 velocity;
     bool isGrounded;
 
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
 
     float turnSmoothVelocity;
     public float turnSmoothTime = 0.1f;
+
+    private Rigidbody rg;
+    private Animator animator;
+     [SerializeField] Transform groundCheck;
+    [SerializeField] LayerMask layer;
+
+    void Start(){
+        animator=GetComponent<Animator>();
+        rg=GetComponent<Rigidbody>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -35,8 +42,8 @@ public class ThirdPersonMovement : MonoBehaviour
 
        
         //gravity
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        // velocity.y += gravity * Time.deltaTime;
+        // controller.Move(velocity * Time.deltaTime);
         //walk
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -44,12 +51,27 @@ public class ThirdPersonMovement : MonoBehaviour
 
         if(direction.magnitude >= 0.1f)
         {
+            animator.SetBool("isMoving",true);
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+            rg.velocity=new Vector3(horizontal*speed,rg.velocity.y,vertical*speed);
+        
         }
+
+        else{
+            animator.SetBool("isMoving",false);
+        }
+
+         if(Input.GetButtonDown("Jump")&& GroundCheck() ){
+            Debug.Log("jump");
+            rg.velocity=new Vector3(0,5f,0);
+        }
+    }
+     bool GroundCheck(){
+        Debug.Log(Physics.CheckSphere(groundCheck.position,0.5f,layer));
+        return Physics.CheckSphere(groundCheck.position,0.5f,layer);
     }
 }
