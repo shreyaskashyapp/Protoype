@@ -37,10 +37,10 @@ public class movement : MonoBehaviour
         //jump
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
+        // if (isGrounded && velocity.y < 0)
+        // {
+        //     velocity.y = -2f;
+        // }
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -70,6 +70,7 @@ public class movement : MonoBehaviour
         }
         else{
           animator.SetBool("isMoving",false);
+          
         }
     }
 }
