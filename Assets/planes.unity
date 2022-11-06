@@ -721,7 +721,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639878164}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &639878166
 Camera:
   m_ObjectHideFlags: 0
@@ -2159,4 +2159,4 @@ MonoBehaviour:
   cam1: {fileID: 639878166}
   fpoint: {fileID: 820878568}
   projectile: {fileID: 7042991756303299814, guid: 7871f2301d492a41684113bfe2bba64d, type: 3}
-  ProjectileSpeed: 30
+  ProjectileSpeed: 50
