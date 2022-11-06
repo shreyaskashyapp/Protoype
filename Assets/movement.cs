@@ -25,6 +25,14 @@ public class movement : MonoBehaviour
     float turnSmoothVelocity;
     public float turnSmoothTime = 0.1f;
     private Animator animator;
+    private bool isAttackPressed;
+    private bool isAttacking;
+    public float attackDelay=2f;
+    public Camera cam1;
+    private Vector3 destination;
+    public Transform fpoint;
+    public GameObject projectile;
+    public float ProjectileSpeed=30;
 
      void Start()
   {
@@ -73,4 +81,48 @@ public class movement : MonoBehaviour
           
         }
     }
+
+  void FixedUpdate() {
+    if(Input.GetKeyDown(KeyCode.RightControl)){
+      Debug.Log("fire");
+      isAttackPressed=true;
+      Invoke("fire",1f);
+    }
+
+    if(isAttackPressed){
+      isAttackPressed=false;
+
+      if(!isAttacking){
+        isAttacking=true;
+
+        animator.Play("fire");
+        
+        Invoke("AttackComplete",attackDelay);
+      }
+    }
+  }
+void AttackComplete(){
+  Debug.Log("ATTACK COMPLETE");
+  animator.Play("idle");
+  isAttacking=false;
+}
+
+void fire(){
+  Ray ray = cam1.ViewportPointToRay(new Vector3(0.5f,0.5f,0));
+  RaycastHit hit;
+
+  if(Physics.Raycast(ray,out hit)){
+    destination=hit.point;
+  }
+  else{
+    destination=ray.GetPoint(1000);
+  }
+
+  InstantiateProjectile(fpoint);
+}
+
+void InstantiateProjectile(Transform firepoint){
+  var ProjectileObj= Instantiate(projectile,firepoint.position,Quaternion.identity) as GameObject;
+  ProjectileObj.GetComponent<Rigidbody>().velocity=(destination - firepoint.position).normalized* ProjectileSpeed;
+}
 }
